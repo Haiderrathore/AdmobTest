@@ -16,7 +16,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        // Create window with the windowScene
+        let window = UIWindow(windowScene: windowScene)
+        
+        // Create and set TestViewController as root
+        let testViewController = TestViewController()
+        let navigationController = UINavigationController(rootViewController: testViewController)
+        
+        // Configure navigation bar appearance
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+        navigationController.navigationBar.standardAppearance = appearance
+        navigationController.navigationBar.scrollEdgeAppearance = appearance
+        
+        // Set window's root view controller and make it visible
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
+        
+        // Assign window to SceneDelegate's window property
+        self.window = window
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -27,8 +48,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        if let rootViewController = window?.rootViewController {
+            AdManager.shared.showAppOpenAd(from: rootViewController)
+        }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {

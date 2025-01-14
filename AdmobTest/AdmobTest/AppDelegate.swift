@@ -6,14 +6,23 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // Initialize AdManager
+        _ = AdManager.shared
         return true
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Show app open ad when app becomes active
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            AdManager.shared.showAppOpenAd(from: rootViewController)
+        }
     }
 
     // MARK: UISceneSession Lifecycle
